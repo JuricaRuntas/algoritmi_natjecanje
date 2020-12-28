@@ -2,39 +2,38 @@
 #include <vector>
 using namespace std;
 
-void dfs(vector<vector<int>> adj_mat, int start, vector<int>& visited){
-  visited[start] = true;
-  cout << start << " ";
-  for (int i = 0; i < adj_mat.size(); ++i){
-    if (!visited[i] && adj_mat[start][i]){
-      dfs(adj_mat, i, visited);
-    }
+const int v = 5;
+bool visited[v+1];
+vector<int> adj_list[v+1];
+
+void dfs(int s){
+  if (visited[s]) return;
+  visited[s] = true;
+  cout << s << " ";
+  for (auto u : adj_list[s]){
+    if (visited[u]) continue;
+    dfs(u);
   }
 }
 
 int main(){
-  int v, e;
-  cin >> v >> e;
-  vector<vector<int>> adj_mat;
-  vector<int> visited(v, false);
+  // graph from Competitive Programmer's Handbook - page 117
+  adj_list[1].push_back(2);
+  adj_list[1].push_back(4);
 
-  for (int i = 0; i < v; ++i){
-    vector<int> row(v, 0);
-    adj_mat.push_back(row);
-  }
+  adj_list[2].push_back(1);
+  adj_list[2].push_back(3);
+  adj_list[2].push_back(5);
   
-  adj_mat[0][1] = 1;
-  adj_mat[0][2] = 1;
-  adj_mat[0][3] = 1;
-  adj_mat[1][0] = 1;
-  adj_mat[1][2] = 1;
-  adj_mat[2][0] = 1;
-  adj_mat[2][1] = 1;
-  adj_mat[2][4] = 1;
-  adj_mat[3][0] = 1;
-  adj_mat[4][2] = 1;
-
-  dfs(adj_mat, 0, visited);
-
+  adj_list[3].push_back(2);
+  adj_list[3].push_back(5);
+  
+  adj_list[4].push_back(1);
+  
+  adj_list[5].push_back(2);
+  adj_list[5].push_back(3);
+  
+  dfs(1);
+  
   return 0;
 }
