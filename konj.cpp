@@ -1,29 +1,26 @@
 #include <iostream>
 #include <vector>
-#include <deque>
-#include <algorithm>
+#include <queue>
 using namespace std;
 vector<vector<int>> visited;
 
 int solve(vector<vector<int>> ploca, int r, int s, int x, int y){
   vector<int> pomicanja_po_x = {-1, -1, -2, -2, 1, 1, 2, 2};
   vector<int> pomicanja_po_y = {-2, 2, -1, 1, -2, 2, -1, 1};
-  int suma = ploca[x][y];
-  deque<pair<int,int>> q;
-  q.push_back({x, y});
+  int suma = 0;
+  queue<pair<int,int>> q;
+  q.push({x, y});
   while (!q.empty()){
     pair<int,int> curr = q.front();
-    q.pop_front();
+    q.pop();
     if (visited[curr.first][curr.second] == 1) continue;
     visited[curr.first][curr.second] = 1;
+    suma += ploca[curr.first][curr.second];
     for (int i = 0; i < 8; ++i){
       int novi_x = curr.first+pomicanja_po_x[i];
       int novi_y = curr.second+pomicanja_po_y[i];
       if (novi_x < 0 || novi_y < 0 || novi_x >= r || novi_y >= s) continue;
-      if (visited[novi_x][novi_y] != 1 && find(q.begin(), q.end(), make_pair(novi_x, novi_y)) == q.end()){
-        q.push_back({novi_x, novi_y});
-        suma += ploca[novi_x][novi_y];
-      }
+      if (visited[novi_x][novi_y] != 1) q.push({novi_x, novi_y});
     }
   }
   return suma;
@@ -44,7 +41,7 @@ int main(){
   int max_rezultat = 0;
   for (int i = 0; i < r; ++i){
     for (int j = 0; j < s; ++j){
-      if (visited[i][j] != 1){
+      if (ploca[i][j] != 0){
         max_rezultat = max(max_rezultat, solve(ploca, r, s, i, j));
       }
     }
